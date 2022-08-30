@@ -1,5 +1,6 @@
-package com.gerenciador.clientes.models;
+package com.gerenciador.clientes.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -10,17 +11,18 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL) //Todas vezes que for serializar o objeto para JSON, será oculto objetos com valores nulos.
 @Entity
 @Table(name = "CIDADE")
-public class CidadeModel  implements Serializable {
+public class Cidade implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cidadeId;
+    private Integer Id;
 
     @Column(nullable = false, length = 150)
     private String nome;
 
-    @Column(nullable = false, length = 3)
-    private String uf;
+    @JsonIgnore
+    @ManyToOne
+    private Uf uf;
 
 }
