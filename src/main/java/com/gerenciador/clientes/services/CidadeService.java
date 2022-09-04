@@ -33,4 +33,8 @@ public class CidadeService {
     public Cidade save(Cidade cidade){
         return cidadeRepository.save(cidade);
     }
+
+    public Cidade updateCidade(Cidade cidade) {
+        return this.save(cidade);
+    }
 }

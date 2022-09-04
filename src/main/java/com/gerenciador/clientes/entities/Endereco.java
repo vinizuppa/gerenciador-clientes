@@ -1,14 +1,11 @@
 package com.gerenciador.clientes.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL) //Todas vezes que for serializar o objeto para JSON, será oculto objetos com valores nulos.
 @Entity
 @Table(name = "ENDERECO")
 public class Endereco implements Serializable {
@@ -16,10 +13,10 @@ public class Endereco implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @Column(length = 150)
-    private String endereco;
+    private String rua;
 
     @Column(length = 5)
     private String numero;
@@ -33,8 +30,8 @@ public class Endereco implements Serializable {
     @ManyToOne
     private Cidade cidade;
 
-    @JsonIgnore
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
 }

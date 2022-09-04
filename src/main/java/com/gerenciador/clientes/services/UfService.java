@@ -1,6 +1,8 @@
 package com.gerenciador.clientes.services;
 
+import com.gerenciador.clientes.entities.Cidade;
 import com.gerenciador.clientes.entities.Uf;
+import com.gerenciador.clientes.repositories.CidadeRepository;
 import com.gerenciador.clientes.repositories.UfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,9 @@ public class UfService {
     @Autowired
     UfRepository ufRepository;
 
+    @Autowired
+    CidadeRepository cidadeRepository;
+
     //Metodo para buscar todas Uf
     public Page<Uf> findAll(Pageable pageable){
         return ufRepository.findAll(pageable);
@@ -24,4 +29,5 @@ public class UfService {
     public Optional<Uf> findById(Integer ufId){
         return ufRepository.findById(ufId);
     }
+
 }

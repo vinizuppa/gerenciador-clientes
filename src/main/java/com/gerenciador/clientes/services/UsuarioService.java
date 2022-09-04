@@ -1,11 +1,18 @@
 package com.gerenciador.clientes.services;
 
+import com.gerenciador.clientes.entities.Endereco;
 import com.gerenciador.clientes.entities.Usuario;
+import com.gerenciador.clientes.models.Usuario.UsuarioRequest;
+import com.gerenciador.clientes.models.Usuario.UsuarioUpdateRequest;
+import com.gerenciador.clientes.repositories.EnderecoRepository;
 import com.gerenciador.clientes.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -14,9 +21,15 @@ public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    //Metodo para buscar todos clientes
-    public List<Usuario> findAll(){
-        return usuarioRepository.findAll();
+    @Autowired
+    EnderecoRepository enderecoRepository;
+
+    @Autowired
+    EnderecoService enderecoService;
+
+    //Metodo para buscar todos clientes com paginação
+    public Page<Usuario> findAll(Specification<Usuario> spec, Pageable pageable){
+        return usuarioRepository.findAll(spec, pageable);
     }
 
     //Metodo para buscar cliente pelo id
@@ -29,23 +42,28 @@ public class UsuarioService {
         return usuarioRepository.findByDocumento(documento);
     }
 
-    //Metodo para salvar cliente
+    //Metodo para salvar usuario
+    @Transactional
+    public Usuario save(Usuario usuario, UsuarioRequest usuarioRequest){
+
+       usuario = usuarioRepository.save(usuario);
+
+       enderecoService.save(usuario, usuarioRequest);
+
+        return usuario;
+    }
+
     public Usuario save(Usuario usuario){
 
         return usuarioRepository.save(usuario);
     }
 
     //Metodo para atualizar cliente
-    public Usuario updateCliente(Usuario usuario){
-        usuario = this.save(usuario);//Salva cliente com as atualizações no banco
+    @Transactional
+    public Usuario updateUsuario(Usuario usuario, UsuarioUpdateRequest usuarioUpdateRequest){
+        this.save(usuario);
+        enderecoService.update(usuario, usuarioUpdateRequest);
         return usuario;
     }
-
-    //Metodo para atualizar senha do cliente
-    public Usuario updateSenha(Usuario usuario){
-        return save(usuario);
-    }
-
-
 
 }
